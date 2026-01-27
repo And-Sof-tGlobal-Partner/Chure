@@ -2,6 +2,7 @@
 
 import { useUIStore } from '@/store/ui.store'
 import { menuItems as configMenuItems, type MenuItem } from '@/config/menu.config'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -14,6 +15,7 @@ interface SidebarItemProps {
   locale: string
   expanded: Set<string>
   toggle: (id: string) => void
+  pathname: string
   onNavigate?: () => void
 }
 
@@ -22,6 +24,7 @@ function SidebarItem({
   locale,
   expanded,
   toggle,
+  pathname,
   onNavigate,
 }: SidebarItemProps) {
   const label = locale === 'en' ? item.labelEn : item.labelMn
@@ -54,6 +57,7 @@ function SidebarItem({
                 locale={locale}
                 expanded={expanded}
                 toggle={toggle}
+                pathname={pathname}
                 onNavigate={onNavigate}
               />
             ))}
@@ -63,11 +67,21 @@ function SidebarItem({
     )
   }
 
+  const href = item.href?.replace('{locale}', locale)
+  const isActive = href === pathname
+
   return (
     <Link
-      href={item.href!.replace('{locale}', locale)}
-      className="block px-3 py-2 rounded text-text hover:bg-gold/10 hover:text-gold transition"
+      href={href!}
       onClick={onNavigate}
+      className={`
+        block px-3 py-2 rounded transition
+        ${
+          isActive
+            ? 'bg-gold/20 text-gold font-semibold'
+            : 'text-text hover:bg-gold/10 hover:text-gold'
+        }
+      `}
     >
       {label}
     </Link>
@@ -76,6 +90,7 @@ function SidebarItem({
 
 export default function Sidebar({ locale }: SidebarProps) {
   const { sidebarOpen, closeSidebar } = useUIStore()
+  const pathname = usePathname()
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
   const toggle = (id: string) => {
@@ -101,6 +116,7 @@ export default function Sidebar({ locale }: SidebarProps) {
               locale={locale}
               expanded={expanded}
               toggle={toggle}
+              pathname={pathname}
             />
           ))}
         </nav>
@@ -122,6 +138,7 @@ export default function Sidebar({ locale }: SidebarProps) {
                   locale={locale}
                   expanded={expanded}
                   toggle={toggle}
+                  pathname={pathname}
                   onNavigate={closeSidebar}
                 />
               ))}
