@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0B0B0B;
+  --gold: #C8A44D;
+  --wood: #5A3E2B;
+  --text: #EAE6DF;
+  --muted: #A8A39B;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-gold: var(--gold);
+  --color-wood: var(--wood);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --font-heading: var(--font-cinzel), var(--font-cormorant), serif;
+  --font-body: var(--font-inter), sans-serif;
+}
+
+html {
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+}
+
+/* Prose styles for CMS content */
+.prose {
+  color: var(--text);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--font-heading);
+  color: var(--gold);
+}
+
+.prose a {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: var(--gold);
+  opacity: 0.8;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+  opacity: 0.8;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--gold);
+  color: var(--background);
+}
+
+::-moz-selection {
+  background-color: var(--gold);
+  color: var(--background);
+}
+
