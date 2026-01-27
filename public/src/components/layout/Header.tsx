@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 export default function Header({ locale }: HeaderProps) {
-  const { toggleMobileDrawer, toggleSidebar } = useUIStore()
+  const { toggleMobileDrawer, openSidebar } = useUIStore()
   const { isLoggedIn, user, logout } = useAuthStore()
   const { items } = useCartStore()
 
@@ -19,7 +19,7 @@ export default function Header({ locale }: HeaderProps) {
     <header className="bg-background border-b border-gold/20 sticky top-0 z-30">
       <div className="flex items-center justify-between p-4 md:p-6">
         <button
-          onClick={toggleSidebar}
+          onClick={openSidebar}
           className="md:hidden flex flex-col gap-1 text-gold"
         >
           <div className="w-6 h-0.5 bg-gold" />

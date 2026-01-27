@@ -3,6 +3,7 @@ import { create } from 'zustand'
 interface UIStore {
   sidebarOpen: boolean
   mobileDrawerOpen: boolean
+  openSidebar: () => void
   toggleSidebar: () => void
   toggleMobileDrawer: () => void
   closeSidebar: () => void
@@ -10,8 +11,9 @@ interface UIStore {
 }
 
 export const useUIStore = create<UIStore>((set) => ({
-  sidebarOpen: true,
+  sidebarOpen: false,
   mobileDrawerOpen: false,
+  openSidebar: () => set({ sidebarOpen: true }),
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   toggleMobileDrawer: () =>
     set((state) => ({ mobileDrawerOpen: !state.mobileDrawerOpen })),
