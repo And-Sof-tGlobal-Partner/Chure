@@ -50,11 +50,11 @@ function SidebarItem({
 
         <div
           className={`overflow-hidden transition-all duration-300 ${
-            isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+            isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
           <div className="pl-4 space-y-1 border-l border-gold/20 ml-2">
-            {item.children.map((child) => (
+            {item.children?.map((child) => (
               <MemoizedSidebarItem
                 key={child.id}
                 item={child}

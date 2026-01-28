@@ -11,7 +11,7 @@ export default function Hero({ locale }: HeroProps) {
   const t = locale === 'en' ? en : mn
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-wood/5 to-background px-6">
+    <section className="min-h-screen flex items-center justify-center bg-linear-to-br from-background via-wood/5 to-background px-6">
       <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
         <h1 className="text-5xl md:text-7xl font-heading font-bold text-gold">
           {t.hero.title}

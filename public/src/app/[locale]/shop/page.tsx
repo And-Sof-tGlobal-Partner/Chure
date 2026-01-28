@@ -187,7 +187,7 @@ export default function ShopPage({ params }: ShopPageProps) {
                 onClick={() => router.push(`/${locale}/shop/${product.id}`)}
                 className="p-6 border border-gold/20 rounded hover:border-gold/40 transition group cursor-pointer"
               >
-                <div className="w-full h-40 bg-gradient-to-br from-gold/10 to-wood/10 rounded mb-4 flex items-center justify-center text-6xl group-hover:scale-110 transition">
+                <div className="w-full h-40 bg-linear-to-br from-gold/10 to-wood/10 rounded mb-4 flex items-center justify-center text-6xl group-hover:scale-110 transition">
                   {product.image}
                 </div>
                 <h3 className="text-lg font-heading text-gold group-hover:text-gold/80 transition">

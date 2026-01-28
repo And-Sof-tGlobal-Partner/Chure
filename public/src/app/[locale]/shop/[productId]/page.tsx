@@ -167,7 +167,7 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Product Image */}
           <div className="flex items-center justify-center">
-            <div className="w-full h-96 bg-gradient-to-br from-gold/10 to-wood/10 rounded-lg flex items-center justify-center text-9xl">
+            <div className="w-full h-96 bg-linear-to-br from-gold/10 to-wood/10 rounded-lg flex items-center justify-center text-9xl">
               {product.image}
             </div>
           </div>

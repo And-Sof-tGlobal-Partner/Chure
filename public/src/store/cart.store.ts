@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export interface CartItem {
   id: string
@@ -11,6 +12,8 @@ export interface CartItem {
 interface CartStore {
   items: CartItem[]
   isDrawerOpen: boolean
+  isLoading: boolean
+  error: string | null
   addToCart: (item: CartItem) => void
   removeFromCart: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
@@ -18,12 +21,18 @@ interface CartStore {
   toggleDrawer: () => void
   closeDrawer: () => void
   getTotalPrice: () => number
+  setError: (error: string | null) => void
+  setLoading: (loading: boolean) => void
 }
 
-export const useCartStore = create<CartStore>((set, get) => ({
-  items: [],
-  isDrawerOpen: false,
-  addToCart: (item) =>
+export const useCartStore = create<CartStore>(
+  persist(
+    (set, get) => ({
+      items: [],
+      isDrawerOpen: false,
+      isLoading: false,
+      error: null,
+      addToCart: (item) =>
     set((state) => {
       const existingItem = state.items.find((i) => i.id === item.id)
       if (existingItem) {
@@ -53,4 +62,9 @@ export const useCartStore = create<CartStore>((set, get) => ({
   getTotalPrice: () => {
     return get().items.reduce((total, item) => total + item.price * item.quantity, 0)
   },
-}))
+  setError: (error) => set({ error }),
+  setLoading: (loading) => set({ isLoading: loading }),
+    }),
+    { name: 'chure-cart' }
+  )
+)

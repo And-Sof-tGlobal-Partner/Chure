@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface AdminUIStore {
   sidebarOpen: boolean
@@ -7,9 +8,14 @@ interface AdminUIStore {
   setActiveTab: (tab: string) => void
 }
 
-export const useAdminUIStore = create<AdminUIStore>((set) => ({
-  sidebarOpen: true,
-  activeTab: 'dashboard',
-  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-  setActiveTab: (tab) => set({ activeTab: tab }),
-}))
+export const useAdminUIStore = create<AdminUIStore>(
+  persist(
+    (set) => ({
+      sidebarOpen: true,
+      activeTab: 'dashboard',
+      toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+      setActiveTab: (tab) => set({ activeTab: tab }),
+    }),
+    { name: 'chure-admin-ui' }
+  )
+)

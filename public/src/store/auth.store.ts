@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export interface User {
   id: string
@@ -11,6 +12,8 @@ export interface User {
 interface AuthStore {
   isLoggedIn: boolean
   user: User | null
+  isLoading: boolean
+  error: string | null
   login: (emailOrPhone: string, password: string) => Promise<void>
   signup: (name: string, emailOrPhone: string, password: string) => Promise<void>
   logout: () => void
@@ -20,12 +23,18 @@ interface AuthStore {
   updateEmail: (newEmail: string) => Promise<void>
   updatePhone: (newPhone: string) => Promise<void>
   updateDeliveryAddress: (address: string) => Promise<void>
+  setError: (error: string | null) => void
+  setLoading: (loading: boolean) => void
 }
 
-export const useAuthStore = create<AuthStore>((set, get) => ({
-  isLoggedIn: false,
-  user: null,
-  login: async (emailOrPhone: string, password: string) => {
+export const useAuthStore = create<AuthStore>(
+  persist(
+    (set, get) => ({
+      isLoggedIn: false,
+      user: null,
+      isLoading: false,
+      error: null,
+      login: async (emailOrPhone: string, password: string) => {
     // Validation happens on frontend, backend should validate:
     // - emailOrPhone is either valid email or phone number
     // - password matches user's password
@@ -100,4 +109,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ user: { ...current, deliveryAddress: address } })
     }
   },
-}))
+  setError: (error) => set({ error }),
+  setLoading: (loading) => set({ isLoading: loading }),
+    }),
+    { name: 'chure-auth' }
+  )
+)

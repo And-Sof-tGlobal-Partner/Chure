@@ -11,7 +11,7 @@ export default function FinalStatement({ locale }: FinalStatementProps) {
   const t = locale === 'en' ? en : mn
 
   return (
-    <section className="py-20 px-6 bg-gradient-to-br from-wood/10 to-background text-center">
+    <section className="py-20 px-6 bg-linear-to-br from-wood/10 to-background text-center">
       <div className="max-w-3xl mx-auto">
         <p className="text-2xl md:text-3xl font-heading text-gold/80">
           {t.landing.finalStatement.part1}

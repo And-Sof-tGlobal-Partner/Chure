@@ -25,7 +25,7 @@ export default function Featured({ locale }: FeaturedProps) {
           {collections.map((item) => (
             <div
               key={item.slug}
-              className="aspect-square rounded bg-gradient-to-br from-gold/20 to-wood/20 border border-gold/30 flex items-end justify-start p-6 cursor-pointer hover:border-gold transition"
+              className="aspect-square rounded bg-linear-to-br from-gold/20 to-wood/20 border border-gold/30 flex items-end justify-start p-6 cursor-pointer hover:border-gold transition"
             >
               <div>
                 <h3 className="text-2xl font-heading font-bold text-gold">
