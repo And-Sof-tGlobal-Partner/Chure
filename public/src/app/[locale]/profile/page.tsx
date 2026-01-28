@@ -26,6 +26,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   // Email update form
   const [newEmail, setNewEmail] = useState('')
@@ -170,6 +171,7 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     logout()
+    setShowLogoutConfirm(false)
     router.push('/en')
   }
 
@@ -222,7 +224,7 @@ export default function ProfilePage() {
                 Delivery Address
               </button>
               <button
-                onClick={handleLogout}
+                onClick={() => setShowLogoutConfirm(true)}
                 className="w-full text-left px-4 py-3 rounded text-red-400 hover:bg-red-900/20 transition"
               >
                 Logout
@@ -497,6 +499,34 @@ export default function ProfilePage() {
             )}
           </div>
         </div>
+
+        {/* Logout Confirmation Modal */}
+        {showLogoutConfirm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-background border border-gold/30 rounded-lg p-6 max-w-sm mx-4">
+              <h3 className="text-lg font-heading font-bold text-gold mb-4">
+                Confirm Logout
+              </h3>
+              <p className="text-text mb-6">
+                Are you sure you want to log out?
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowLogoutConfirm(false)}
+                  className="flex-1 px-4 py-2 bg-wood/10 text-text border border-gold/30 rounded hover:bg-gold/10 transition font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-medium"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mt-12 text-center">
           <Link href="/en/shop" className="text-gold hover:text-gold/80 text-sm">

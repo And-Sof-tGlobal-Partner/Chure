@@ -16,6 +16,13 @@ export default function Header({ locale }: HeaderProps) {
   const { isLoggedIn, user, logout } = useAuthStore()
   const { items } = useCartStore()
   const [showProfileMenu, setShowProfileMenu] = useState(false)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+
+  const handleLogout = () => {
+    logout()
+    setShowProfileMenu(false)
+    setShowLogoutConfirm(false)
+  }
 
   return (
     <header className="bg-background border-b border-gold/20 sticky top-0 z-30">
@@ -92,14 +99,39 @@ export default function Header({ locale }: HeaderProps) {
                     Shop
                   </Link>
                   <button
-                    onClick={() => {
-                      logout()
-                      setShowProfileMenu(false)
-                    }}
+                    onClick={() => setShowLogoutConfirm(true)}
                     className="w-full text-left px-4 py-3 text-red-400 hover:bg-red-900/20 rounded-b transition text-sm"
                   >
                     Logout
                   </button>
+                </div>
+              )}
+
+              {/* Logout Confirmation Modal */}
+              {showLogoutConfirm && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                  <div className="bg-background border border-gold/30 rounded-lg p-6 max-w-sm mx-4">
+                    <h3 className="text-lg font-heading font-bold text-gold mb-4">
+                      Confirm Logout
+                    </h3>
+                    <p className="text-text mb-6">
+                      Are you sure you want to log out?
+                    </p>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setShowLogoutConfirm(false)}
+                        className="flex-1 px-4 py-2 bg-wood/10 text-text border border-gold/30 rounded hover:bg-gold/10 transition font-medium"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-medium"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
