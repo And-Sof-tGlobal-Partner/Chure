@@ -5,7 +5,8 @@ import { useAuthStore } from '@/store/auth.store'
 import { useCartStore } from '@/store/cart.store'
 import Link from 'next/link'
 import { useState } from 'react'
-import LanguageToggle from '@/components/ui/LanguageToggle'
+import { useRouter, usePathname } from 'next/navigation'
+import CartDrawer from '@/components/shop/CartDrawer'
 import { en } from '@/locales/en'
 import { mn } from '@/locales/mn'
 
@@ -16,10 +17,18 @@ interface HeaderProps {
 export default function Header({ locale }: HeaderProps) {
   const { toggleMobileDrawer, openSidebar } = useUIStore()
   const { isLoggedIn, user, logout } = useAuthStore()
-  const { items } = useCartStore()
+  const { items, toggleDrawer } = useCartStore()
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const t = locale === 'en' ? en : mn
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const toggleLocale = () => {
+    const newLocale = locale === 'en' ? 'mn' : 'en'
+    const newPathname = pathname.replace(/^\/(en|mn)/, `/${newLocale}`)
+    router.push(newPathname, { scroll: false })
+  }
 
   const handleLogout = () => {
     logout()
@@ -41,34 +50,39 @@ export default function Header({ locale }: HeaderProps) {
 
         <div className="flex items-center gap-4">
           {/* Language Toggle */}
-          <LanguageToggle />
-
-          {/* Cart Icon */}
-          <Link
-            href={`/${locale}/shop`}
-            className="relative text-gold hover:text-gold/80 transition"
+          <button
+            onClick={toggleLocale}
+            className="px-3 py-2 rounded border border-gold/30 text-gold hover:bg-gold/10 transition text-sm font-medium"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-            {items.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-gold text-background text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                {items.length}
-              </span>
-            )}
-          </Link>
+            {locale === 'en' ? 'МН' : 'EN'}
+          </button>
 
-          {/* Auth */}
+          {/* Cart Icon - Only for logged in users */}
+          {isLoggedIn && (
+            <button
+              onClick={toggleDrawer}
+              className="relative text-gold hover:text-gold/80 transition"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+              {items.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-gold text-background text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {items.length}
+                </span>
+              )}
+            </button>
+          )}          {/* Auth */}
           {isLoggedIn ? (
             <div className="relative">
               <button
@@ -148,6 +162,9 @@ export default function Header({ locale }: HeaderProps) {
           )}
         </div>
       </div>
+
+      {/* Cart Drawer */}
+      <CartDrawer locale={locale} />
     </header>
   )
 }
