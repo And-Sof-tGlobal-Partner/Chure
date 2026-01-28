@@ -8,14 +8,12 @@ interface AdminUIStore {
   setActiveTab: (tab: string) => void
 }
 
-export const useAdminUIStore = create<AdminUIStore>(
-  persist(
-    (set) => ({
-      sidebarOpen: true,
-      activeTab: 'dashboard',
-      toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-      setActiveTab: (tab) => set({ activeTab: tab }),
-    }),
-    { name: 'chure-admin-ui' }
-  )
-)
+export const useAdminUIStore = create<AdminUIStore>()(persist(
+  (set) => ({
+    sidebarOpen: true,
+    activeTab: 'dashboard',
+    toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+    setActiveTab: (tab) => set({ activeTab: tab }),
+  }),
+  { name: 'chure-admin-ui' }
+))

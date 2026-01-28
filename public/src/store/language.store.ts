@@ -6,12 +6,10 @@ interface LanguageStore {
   setLocale: (locale: 'en' | 'mn') => void
 }
 
-export const useLanguageStore = create<LanguageStore>(
-  persist(
-    (set) => ({
-      locale: 'en',
-      setLocale: (locale) => set({ locale }),
-    }),
-    { name: 'chure-language' }
-  )
-)
+export const useLanguageStore = create<LanguageStore>()(persist(
+  (set) => ({
+    locale: 'en',
+    setLocale: (locale) => set({ locale }),
+  }),
+  { name: 'chure-language' }
+))

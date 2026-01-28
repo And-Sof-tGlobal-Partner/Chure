@@ -25,9 +25,8 @@ interface CartStore {
   setLoading: (loading: boolean) => void
 }
 
-export const useCartStore = create<CartStore>(
-  persist(
-    (set, get) => ({
+export const useCartStore = create<CartStore>()(persist(
+  (set, get) => ({
       items: [],
       isDrawerOpen: false,
       isLoading: false,
@@ -64,7 +63,6 @@ export const useCartStore = create<CartStore>(
   },
   setError: (error) => set({ error }),
   setLoading: (loading) => set({ isLoading: loading }),
-    }),
-    { name: 'chure-cart' }
-  )
-)
+  }),
+  { name: 'chure-cart' }
+))

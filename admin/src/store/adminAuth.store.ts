@@ -14,9 +14,8 @@ interface AdminAuthStore {
   setLoading: (loading: boolean) => void
 }
 
-export const useAdminAuthStore = create<AdminAuthStore>(
-  persist(
-    (set) => ({
+export const useAdminAuthStore = create<AdminAuthStore>()(persist(
+  (set) => ({
       isLoggedIn: false,
       user: null,
       isLoading: false,
@@ -39,7 +38,6 @@ export const useAdminAuthStore = create<AdminAuthStore>(
       },
       setError: (error) => set({ error }),
       setLoading: (loading) => set({ isLoading: loading }),
-    }),
-    { name: 'chure-admin-auth' }
-  )
-)
+  }),
+  { name: 'chure-admin-auth' }
+))

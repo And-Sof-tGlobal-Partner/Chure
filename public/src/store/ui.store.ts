@@ -11,18 +11,16 @@ interface UIStore {
   closeMobileDrawer: () => void
 }
 
-export const useUIStore = create<UIStore>(
-  persist(
-    (set) => ({
-      sidebarOpen: false,
-      mobileDrawerOpen: false,
-      openSidebar: () => set({ sidebarOpen: true }),
-      toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-      toggleMobileDrawer: () =>
-        set((state) => ({ mobileDrawerOpen: !state.mobileDrawerOpen })),
-      closeSidebar: () => set({ sidebarOpen: false }),
-      closeMobileDrawer: () => set({ mobileDrawerOpen: false }),
-    }),
-    { name: 'chure-ui' }
-  )
-)
+export const useUIStore = create<UIStore>()(persist(
+  (set) => ({
+    sidebarOpen: false,
+    mobileDrawerOpen: false,
+    openSidebar: () => set({ sidebarOpen: true }),
+    toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+    toggleMobileDrawer: () =>
+      set((state) => ({ mobileDrawerOpen: !state.mobileDrawerOpen })),
+    closeSidebar: () => set({ sidebarOpen: false }),
+    closeMobileDrawer: () => set({ mobileDrawerOpen: false }),
+  }),
+  { name: 'chure-ui' }
+))
