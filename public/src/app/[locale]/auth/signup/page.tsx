@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuthStore } from '@/store/auth.store'
 import Link from 'next/link'
 
 interface SignupPageProps {
@@ -10,11 +11,28 @@ interface SignupPageProps {
   }>
 }
 
+const validatePassword = (password: string) => {
+  return {
+    hasMinLength: password.length >= 8,
+    hasUpperCase: /[A-Z]/.test(password),
+    hasNumber: /[0-9]/.test(password),
+    hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+  }
+}
+
+const isPasswordValid = (password: string) => {
+  const rules = validatePassword(password)
+  return Object.values(rules).every(Boolean)
+}
+
 export default function SignupPage() {
   const router = useRouter()
+  const { signup } = useAuthStore()
+  const [contactType, setContactType] = useState<'email' | 'phone'>('email')
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
   })
@@ -30,9 +48,32 @@ export default function SignupPage() {
     e.preventDefault()
     setError('')
 
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      setError('Please fill in all fields')
+    if (!formData.name || !formData.password || !formData.confirmPassword) {
+      setError('Please fill in all required fields')
       return
+    }
+
+    if (contactType === 'email') {
+      if (!formData.email) {
+        setError('Please enter your email')
+        return
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        setError('Please enter a valid email address')
+        return
+      }
+    } else {
+      if (!formData.phone) {
+        setError('Please enter your phone number')
+        return
+      }
+      // Mongolia phone validation: +976 or 976 or just 8 digits starting with 7, 8, or 9
+      const cleanPhone = formData.phone.replace(/[-\s]/g, '')
+      const isValidPhone = /^(\+?976|976)?[789]\d{7}$/.test(cleanPhone)
+      if (!isValidPhone) {
+        setError('Please enter a valid Mongolian phone number (e.g., +976 XX XXX XXXX)')
+        return
+      }
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -40,10 +81,19 @@ export default function SignupPage() {
       return
     }
 
+    if (!isPasswordValid(formData.password)) {
+      setError('Password does not meet all requirements')
+      return
+    }
+
     setLoading(true)
     try {
-      // API call would go here
-      router.push('/en/auth/login')
+      await signup(
+        formData.name,
+        contactType === 'email' ? formData.email : formData.phone,
+        formData.password
+      )
+      router.push('/en/shop')
     } catch (err) {
       setError('Signup failed. Please try again.')
       console.error('Signup error:', err)
@@ -84,18 +134,64 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="block text-text text-sm font-medium mb-2">
-              Email
+            <label className="block text-text text-sm font-medium mb-3">
+              Register with
             </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 bg-wood/10 border border-gold/30 rounded text-text placeholder-muted focus:outline-none focus:border-gold transition"
-              placeholder="your@email.com"
-            />
+            <div className="flex gap-3 mb-4">
+              <button
+                type="button"
+                onClick={() => setContactType('email')}
+                className={`flex-1 px-4 py-2 rounded font-medium transition ${
+                  contactType === 'email'
+                    ? 'bg-gold text-background'
+                    : 'bg-wood/10 text-text border border-gold/30 hover:bg-gold/10'
+                }`}
+              >
+                Email
+              </button>
+              <button
+                type="button"
+                onClick={() => setContactType('phone')}
+                className={`flex-1 px-4 py-2 rounded font-medium transition ${
+                  contactType === 'phone'
+                    ? 'bg-gold text-background'
+                    : 'bg-wood/10 text-text border border-gold/30 hover:bg-gold/10'
+                }`}
+              >
+                Phone Number
+              </button>
+            </div>
           </div>
+
+          {contactType === 'email' ? (
+            <div>
+              <label className="block text-text text-sm font-medium mb-2">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-wood/10 border border-gold/30 rounded text-text placeholder-muted focus:outline-none focus:border-gold transition"
+                placeholder="your@email.com"
+              />
+            </div>
+          ) : (
+            <div>
+              <label className="block text-text text-sm font-medium mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-wood/10 border border-gold/30 rounded text-text placeholder-muted focus:outline-none focus:border-gold transition"
+                placeholder="+976 XX XXX XXXX"
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-text text-sm font-medium mb-2">
@@ -109,6 +205,26 @@ export default function SignupPage() {
               className="w-full px-4 py-2 bg-wood/10 border border-gold/30 rounded text-text placeholder-muted focus:outline-none focus:border-gold transition"
               placeholder="••••••••"
             />
+            {formData.password && (
+              <div className="mt-3 space-y-2 text-sm">
+                <div className={`flex items-center gap-2 ${validatePassword(formData.password).hasMinLength ? 'text-green-400' : 'text-muted'}`}>
+                  <span>{validatePassword(formData.password).hasMinLength ? '✓' : '○'}</span>
+                  <span>At least 8 characters</span>
+                </div>
+                <div className={`flex items-center gap-2 ${validatePassword(formData.password).hasUpperCase ? 'text-green-400' : 'text-muted'}`}>
+                  <span>{validatePassword(formData.password).hasUpperCase ? '✓' : '○'}</span>
+                  <span>One uppercase letter (A-Z)</span>
+                </div>
+                <div className={`flex items-center gap-2 ${validatePassword(formData.password).hasNumber ? 'text-green-400' : 'text-muted'}`}>
+                  <span>{validatePassword(formData.password).hasNumber ? '✓' : '○'}</span>
+                  <span>One number (0-9)</span>
+                </div>
+                <div className={`flex items-center gap-2 ${validatePassword(formData.password).hasSpecialChar ? 'text-green-400' : 'text-muted'}`}>
+                  <span>{validatePassword(formData.password).hasSpecialChar ? '✓' : '○'}</span>
+                  <span>One special character (!@#$%^&*)</span>
+                </div>
+              </div>
+            )}
           </div>
 
           <div>

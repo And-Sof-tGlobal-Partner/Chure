@@ -4,6 +4,7 @@ import { useUIStore } from '@/store/ui.store'
 import { useAuthStore } from '@/store/auth.store'
 import { useCartStore } from '@/store/cart.store'
 import Link from 'next/link'
+import { useState } from 'react'
 import LanguageToggle from '@/components/ui/LanguageToggle'
 
 interface HeaderProps {
@@ -14,6 +15,7 @@ export default function Header({ locale }: HeaderProps) {
   const { toggleMobileDrawer, openSidebar } = useUIStore()
   const { isLoggedIn, user, logout } = useAuthStore()
   const { items } = useCartStore()
+  const [showProfileMenu, setShowProfileMenu] = useState(false)
 
   return (
     <header className="bg-background border-b border-gold/20 sticky top-0 z-30">
@@ -58,14 +60,48 @@ export default function Header({ locale }: HeaderProps) {
 
           {/* Auth */}
           {isLoggedIn ? (
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-muted">{user?.email}</span>
+            <div className="relative">
               <button
-                onClick={() => logout()}
-                className="px-4 py-2 text-text border border-gold/30 rounded hover:bg-gold/10 transition text-sm"
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                className="flex items-center gap-2 px-4 py-2 text-text border border-gold/30 rounded hover:bg-gold/10 transition text-sm"
               >
-                Logout
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                <span className="hidden sm:inline">{user?.name || user?.email}</span>
               </button>
+
+              {showProfileMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-wood/20 border border-gold/30 rounded shadow-lg">
+                  <Link
+                    href={`/${locale}/profile`}
+                    className="block px-4 py-3 text-text hover:bg-gold/10 rounded-t transition text-sm"
+                    onClick={() => setShowProfileMenu(false)}
+                  >
+                    My Profile
+                  </Link>
+                  <Link
+                    href={`/${locale}/shop`}
+                    className="block px-4 py-3 text-text hover:bg-gold/10 transition text-sm"
+                    onClick={() => setShowProfileMenu(false)}
+                  >
+                    Shop
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout()
+                      setShowProfileMenu(false)
+                    }}
+                    className="w-full text-left px-4 py-3 text-red-400 hover:bg-red-900/20 rounded-b transition text-sm"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <Link

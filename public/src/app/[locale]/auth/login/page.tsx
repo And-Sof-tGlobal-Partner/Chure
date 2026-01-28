@@ -14,7 +14,8 @@ interface LoginPageProps {
 export default function LoginPage() {
   const router = useRouter()
   const { login } = useAuthStore()
-  const [email, setEmail] = useState('')
+  const [loginType, setLoginType] = useState<'email' | 'phone'>('email')
+  const [emailOrPhone, setEmailOrPhone] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -23,14 +24,29 @@ export default function LoginPage() {
     e.preventDefault()
     setError('')
     
-    if (!email || !password) {
+    if (!emailOrPhone || !password) {
       setError('Please fill in all fields')
       return
     }
 
+    if (loginType === 'phone') {
+      // Mongolia phone validation: +976 or 976 or just 8 digits starting with 7, 8, or 9
+      const cleanPhone = emailOrPhone.replace(/[-\s]/g, '')
+      const isValidPhone = /^(\+?976|976)?[789]\d{7}$/.test(cleanPhone)
+      if (!isValidPhone) {
+        setError('Please enter a valid Mongolian phone number (e.g., +976 XX XXX XXXX)')
+        return
+      }
+    } else {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailOrPhone)) {
+        setError('Please enter a valid email address')
+        return
+      }
+    }
+
     setLoading(true)
     try {
-      await login(email, password)
+      await login(emailOrPhone, password)
       // Redirect to shop after successful login
       router.push('/en/shop')
     } catch (err) {
@@ -59,15 +75,45 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
+            <label className="block text-text text-sm font-medium mb-3">
+              Login with
+            </label>
+            <div className="flex gap-3 mb-4">
+              <button
+                type="button"
+                onClick={() => setLoginType('email')}
+                className={`flex-1 px-4 py-2 rounded font-medium transition ${
+                  loginType === 'email'
+                    ? 'bg-gold text-background'
+                    : 'bg-wood/10 text-text border border-gold/30 hover:bg-gold/10'
+                }`}
+              >
+                Email
+              </button>
+              <button
+                type="button"
+                onClick={() => setLoginType('phone')}
+                className={`flex-1 px-4 py-2 rounded font-medium transition ${
+                  loginType === 'phone'
+                    ? 'bg-gold text-background'
+                    : 'bg-wood/10 text-text border border-gold/30 hover:bg-gold/10'
+                }`}
+              >
+                Phone Number
+              </button>
+            </div>
+          </div>
+
+          <div>
             <label className="block text-text text-sm font-medium mb-2">
-              Email
+              {loginType === 'email' ? 'Email Address' : 'Phone Number'}
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type={loginType === 'email' ? 'email' : 'tel'}
+              value={emailOrPhone}
+              onChange={(e) => setEmailOrPhone(e.target.value)}
               className="w-full px-4 py-2 bg-wood/10 border border-gold/30 rounded text-text placeholder-muted focus:outline-none focus:border-gold transition"
-              placeholder="your@email.com"
+              placeholder={loginType === 'email' ? 'your@email.com' : '+976 XX XXX XXXX'}
             />
           </div>
 
