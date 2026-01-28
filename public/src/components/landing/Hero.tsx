@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { en } from '@/locales/en'
 import { mn } from '@/locales/mn'
 
@@ -11,8 +12,21 @@ export default function Hero({ locale }: HeroProps) {
   const t = locale === 'en' ? en : mn
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-linear-to-br from-background via-wood/5 to-background px-6">
-      <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
+    <section className="min-h-screen flex items-center justify-center bg-linear-to-br from-background via-wood/5 to-background px-6 relative overflow-hidden">
+      {/* Background lyre image */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
+        <Image
+          src="/ChatGPT Image Jan 29, 2026, 12_42_49 AM.png"
+          alt="Lyre background"
+          width={800}
+          height={800}
+          className="object-contain"
+          priority
+        />
+      </div>
+
+      {/* Content */}
+      <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in relative z-10">
         <h1 className="text-5xl md:text-7xl font-heading font-bold text-gold">
           {t.hero.title}
         </h1>
