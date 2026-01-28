@@ -20,9 +20,7 @@ export default function CartDrawer({ locale }: CartDrawerProps) {
     return null
   }
 
-  if (!isDrawerOpen || items.length === 0) return null
-
-  const totalPrice = getTotalPrice()
+  if (!isDrawerOpen) return null
 
   return (
     <>
@@ -46,57 +44,76 @@ export default function CartDrawer({ locale }: CartDrawerProps) {
           </button>
         </div>
 
-        {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto space-y-4 mb-6">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="p-4 border border-gold/20 rounded bg-wood/5 flex gap-4"
+        {/* Empty Cart State */}
+        {items.length === 0 ? (
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="text-6xl mb-4">🛍️</div>
+            <p className="text-xl text-text/60 text-center mb-6">
+              {t.shop.cart.empty}
+            </p>
+            <Link
+              href={`/${locale}/shop`}
+              onClick={closeDrawer}
+              className="px-6 py-3 bg-gold text-background font-semibold rounded hover:bg-gold/90 transition"
             >
-              <div className="text-4xl">{item.image}</div>
-              <div className="flex-1">
-                <h3 className="font-heading font-bold text-text">{item.name}</h3>
-                <p className="text-gold font-semibold">{item.price.toLocaleString()} ₮</p>
-                <div className="flex items-center gap-2 mt-2">
-                  <button
-                    onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                    className="px-2 py-1 bg-gold/20 text-gold rounded hover:bg-gold/30 transition"
-                  >
-                    −
-                  </button>
-                  <span className="w-8 text-center text-text">{item.quantity}</span>
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="px-2 py-1 bg-gold/20 text-gold rounded hover:bg-gold/30 transition"
-                  >
-                    +
-                  </button>
-                  <button
-                    onClick={() => removeFromCart(item.id)}
-                    className="ml-auto px-3 py-1 text-red-400 hover:bg-red-900/20 rounded transition text-sm"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Total & Checkout */}
-        <div className="border-t border-gold/20 pt-4">
-          <div className="flex justify-between mb-4">
-            <span className="text-text/80">Total:</span>
-            <span className="text-xl font-bold text-gold">{totalPrice.toLocaleString()} ₮</span>
+              {t.shop.cart.continueShopping}
+            </Link>
           </div>
-          <Link
-            href={`/${locale}/shop/checkout`}
-            onClick={closeDrawer}
-            className="block w-full px-6 py-3 bg-gold text-background font-semibold rounded hover:bg-gold/90 transition text-center"
-          >
-            Checkout
-          </Link>
-        </div>
+        ) : (
+          <>
+            {/* Cart Items */}
+            <div className="flex-1 overflow-y-auto space-y-4 mb-6">
+              {items.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-4 border border-gold/20 rounded bg-wood/5 flex gap-4"
+                >
+                  <div className="text-4xl">{item.image}</div>
+                  <div className="flex-1">
+                    <h3 className="font-heading font-bold text-text">{item.name}</h3>
+                    <p className="text-gold font-semibold">{item.price.toLocaleString()} ₮</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <button
+                        onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                        className="px-2 py-1 bg-gold/20 text-gold rounded hover:bg-gold/30 transition"
+                      >
+                        −
+                      </button>
+                      <span className="w-8 text-center text-text">{item.quantity}</span>
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        className="px-2 py-1 bg-gold/20 text-gold rounded hover:bg-gold/30 transition"
+                      >
+                        +
+                      </button>
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="ml-auto px-3 py-1 text-red-400 hover:bg-red-900/20 rounded transition text-sm"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Total & Checkout */}
+            <div className="border-t border-gold/20 pt-4">
+              <div className="flex justify-between mb-4">
+                <span className="text-text/80">Total:</span>
+                <span className="text-xl font-bold text-gold">{getTotalPrice().toLocaleString()} ₮</span>
+              </div>
+              <Link
+                href={`/${locale}/shop/checkout`}
+                onClick={closeDrawer}
+                className="block w-full px-6 py-3 bg-gold text-background font-semibold rounded hover:bg-gold/90 transition text-center"
+              >
+                Checkout
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </>
   )

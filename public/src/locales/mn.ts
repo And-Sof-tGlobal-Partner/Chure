@@ -107,6 +107,10 @@ export const mn = {
       woodcraft: 'Модон урлагийн студи',
       luxury: 'Тансаг цуглуулга',
     },
+    cart: {
+      empty: 'Таны сагс хоосон байна',
+      continueShopping: 'Дэлгүүр рүү',
+    },
   },
 
   // Auth Pages

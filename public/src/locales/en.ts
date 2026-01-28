@@ -106,6 +106,10 @@ export const en = {
       woodcraft: 'Wood Craft Studio',
       luxury: 'Luxury Collection',
     },
+    cart: {
+      empty: 'Your cart is empty',
+      continueShopping: 'Continue Shopping',
+    },
   },
 
   // Auth Pages
