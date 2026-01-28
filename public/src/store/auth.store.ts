@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, PersistStorage } from 'zustand/middleware'
 
 export interface User {
   id: string
@@ -27,9 +27,8 @@ interface AuthStore {
   setLoading: (loading: boolean) => void
 }
 
-export const useAuthStore = create<AuthStore>(
-  persist(
-    (set, get) => ({
+export const useAuthStore = create<AuthStore>()(persist(
+  (set, get) => ({
       isLoggedIn: false,
       user: null,
       isLoading: false,
@@ -111,7 +110,6 @@ export const useAuthStore = create<AuthStore>(
   },
   setError: (error) => set({ error }),
   setLoading: (loading) => set({ isLoading: loading }),
-    }),
-    { name: 'chure-auth' }
-  )
-)
+  }),
+  { name: 'chure-auth' }
+))
