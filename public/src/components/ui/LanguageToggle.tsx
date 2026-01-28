@@ -14,7 +14,7 @@ export default function LanguageToggle() {
 
     // Replace the current locale in the path
     const newPathname = pathname.replace(/^\/(en|mn)/, `/${newLocale}`)
-    router.push(newPathname)
+    router.push(newPathname, { scroll: false })
   }
 
   return (

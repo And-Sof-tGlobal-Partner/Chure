@@ -113,7 +113,7 @@ export default function Sidebar({ locale }: SidebarProps) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-72 bg-wood/10 border-r border-gold/20 flex-col p-6 overflow-y-auto">
+      <aside className="hidden md:flex md:fixed md:left-0 md:top-0 md:bottom-0 md:h-screen w-72 bg-wood/10 border-r border-gold/20 flex-col p-6 overflow-y-auto">
         <div className="mb-8">
           <h1 className="text-2xl font-heading font-bold text-gold">CHURE</h1>
         </div>

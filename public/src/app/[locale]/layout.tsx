@@ -18,7 +18,7 @@ export default async function LocaleLayout({
   return (
     <div className="min-h-screen bg-background text-text flex">
       <Sidebar locale={locale} />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 md:ml-72 flex flex-col">
         <Header locale={locale} />
         <main className="flex-1">{children}</main>
         <Footer locale={locale} />

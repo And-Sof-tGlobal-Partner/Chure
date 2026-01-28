@@ -1,10 +1,14 @@
 'use client'
 
+import { en } from '@/locales/en'
+import { mn } from '@/locales/mn'
+
 interface FooterProps {
   locale: string
 }
 
 export default function Footer({ locale }: FooterProps) {
+  const t = locale === 'en' ? en : mn
   const currentYear = new Date().getFullYear()
 
   return (
@@ -14,34 +18,34 @@ export default function Footer({ locale }: FooterProps) {
           <div>
             <h3 className="text-gold font-heading font-bold mb-4">CHURE</h3>
             <p className="text-muted text-sm">
-              Living culture. Digital platform.
+              {t.footer.tagline}
             </p>
           </div>
           <div>
-            <h4 className="text-text font-semibold mb-4">Explore</h4>
+            <h4 className="text-text font-semibold mb-4">{t.footer.sections.explore}</h4>
             <ul className="space-y-2 text-sm text-muted">
-              <li><a href="#" className="hover:text-gold transition">About</a></li>
-              <li><a href="#" className="hover:text-gold transition">Events</a></li>
-              <li><a href="#" className="hover:text-gold transition">Shop</a></li>
+              <li><a href="#" className="hover:text-gold transition">{t.footer.links.about}</a></li>
+              <li><a href="#" className="hover:text-gold transition">{t.footer.links.events}</a></li>
+              <li><a href="#" className="hover:text-gold transition">{t.footer.links.shop}</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-text font-semibold mb-4">Contact</h4>
+            <h4 className="text-text font-semibold mb-4">{t.footer.sections.contact}</h4>
             <ul className="space-y-2 text-sm text-muted">
-              <li><a href="mailto:info@chure.mn">info@chure.mn</a></li>
-              <li><a href="tel:+976">+976 ...</a></li>
+              <li><a href="mailto:info@chure.mn">{t.footer.email}</a></li>
+              <li><a href="tel:+976">{t.footer.phone}</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-text font-semibold mb-4">Follow</h4>
+            <h4 className="text-text font-semibold mb-4">{t.footer.sections.follow}</h4>
             <ul className="space-y-2 text-sm text-muted">
-              <li><a href="#" className="hover:text-gold transition">Instagram</a></li>
-              <li><a href="#" className="hover:text-gold transition">Facebook</a></li>
+              <li><a href="#" className="hover:text-gold transition">{t.footer.links.instagram}</a></li>
+              <li><a href="#" className="hover:text-gold transition">{t.footer.links.facebook}</a></li>
             </ul>
           </div>
         </div>
         <div className="border-t border-gold/20 pt-8 text-center text-sm text-muted">
-          <p>&copy; {currentYear} CHURE. All rights reserved.</p>
+          <p>&copy; {currentYear} CHURE. {t.footer.copyright}</p>
         </div>
       </div>
     </footer>

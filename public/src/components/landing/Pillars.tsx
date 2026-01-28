@@ -1,34 +1,21 @@
 'use client'
 
+import { en } from '@/locales/en'
+import { mn } from '@/locales/mn'
+
 interface PillarsProps {
   locale: string
 }
 
 export default function Pillars({ locale }: PillarsProps) {
-  const pillars = [
-    {
-      title: 'Cultural Industry',
-      description: 'Support and showcase contemporary cultural creators',
-    },
-    {
-      title: 'Education',
-      description: 'Learn traditional skills and cultural knowledge',
-    },
-    {
-      title: 'Tour & Experience',
-      description: 'Immersive journeys through cultural landscapes',
-    },
-    {
-      title: 'Community & Commerce',
-      description: 'Support artisans through ethical marketplace',
-    },
-  ]
+  const t = locale === 'en' ? en : mn
+  const pillars = t.landing.pillars.items
 
   return (
     <section className="py-20 px-6 bg-wood/5">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-4xl font-heading font-bold text-gold mb-16 text-center">
-          Four Pillars
+          {t.landing.pillars.title}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {pillars.map((pillar, index) => (

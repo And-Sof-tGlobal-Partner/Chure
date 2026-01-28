@@ -6,6 +6,8 @@ import { useCartStore } from '@/store/cart.store'
 import Link from 'next/link'
 import { useState } from 'react'
 import LanguageToggle from '@/components/ui/LanguageToggle'
+import { en } from '@/locales/en'
+import { mn } from '@/locales/mn'
 
 interface HeaderProps {
   locale: string
@@ -17,6 +19,7 @@ export default function Header({ locale }: HeaderProps) {
   const { items } = useCartStore()
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const t = locale === 'en' ? en : mn
 
   const handleLogout = () => {
     logout()
@@ -89,20 +92,20 @@ export default function Header({ locale }: HeaderProps) {
                     className="block px-4 py-3 text-text hover:bg-gold/10 rounded-t transition text-sm"
                     onClick={() => setShowProfileMenu(false)}
                   >
-                    My Profile
+                    {t.header.myProfile}
                   </Link>
                   <Link
                     href={`/${locale}/shop`}
                     className="block px-4 py-3 text-text hover:bg-gold/10 transition text-sm"
                     onClick={() => setShowProfileMenu(false)}
                   >
-                    Shop
+                    {t.header.shop}
                   </Link>
                   <button
                     onClick={() => setShowLogoutConfirm(true)}
                     className="w-full text-left px-4 py-3 text-red-400 hover:bg-red-900/20 rounded-b transition text-sm"
                   >
-                    Logout
+                    {t.header.logout}
                   </button>
                 </div>
               )}
@@ -112,23 +115,23 @@ export default function Header({ locale }: HeaderProps) {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                   <div className="bg-background border border-gold/30 rounded-lg p-6 max-w-sm mx-4">
                     <h3 className="text-lg font-heading font-bold text-gold mb-4">
-                      Confirm Logout
+                      {t.logout.title}
                     </h3>
                     <p className="text-text mb-6">
-                      Are you sure you want to log out?
+                      {t.logout.message}
                     </p>
                     <div className="flex gap-3">
                       <button
                         onClick={() => setShowLogoutConfirm(false)}
                         className="flex-1 px-4 py-2 bg-wood/10 text-text border border-gold/30 rounded hover:bg-gold/10 transition font-medium"
                       >
-                        Cancel
+                        {t.logout.cancel}
                       </button>
                       <button
                         onClick={handleLogout}
                         className="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-medium"
                       >
-                        Logout
+                        {t.logout.logout}
                       </button>
                     </div>
                   </div>
@@ -140,7 +143,7 @@ export default function Header({ locale }: HeaderProps) {
               href={`/${locale}/auth/login`}
               className="px-4 py-2 bg-gold text-background rounded font-medium hover:bg-gold/90 transition text-sm"
             >
-              Login
+              {t.header.login}
             </Link>
           )}
         </div>
