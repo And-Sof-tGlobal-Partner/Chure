@@ -274,29 +274,10 @@ export const menuItems: MenuItem[] = [
     ],
   },
   {
-    id: 'shopping',
-    labelEn: 'Shopping',
-    labelMn: 'Худалдаа',
-    children: [
-      {
-        id: 'chure-brand-store',
-        labelEn: 'CHURE Brand Store',
-        labelMn: 'CHURE Брэнд дэлгүүр',
-        href: '/{locale}/shop/chure-brand-store',
-      },
-      {
-        id: 'chure-online-shop',
-        labelEn: 'CHURE Online Shop',
-        labelMn: 'CHURE Brand онлайн дэлгүүр',
-        href: '/{locale}/shop/chure-online-shop',
-      },
-      {
-        id: 'gifts',
-        labelEn: 'Gift Souvenirs',
-        labelMn: 'Бэлэг дурсгал',
-        href: '/{locale}/shop/gifts',
-      },
-    ],
+    id: 'shop',
+    labelEn: 'Shop',
+    labelMn: 'Дэлгүүр',
+    href: '/{locale}/shop',
   },
   {
     id: 'contact',
